@@ -332,34 +332,36 @@ const STRATA_APP = () => {
                 {activePanel === 'encode' && trainingData && (
                     <div className="flex-1 grid grid-cols-12 gap-6">
                         <div className="col-span-8 flex flex-col gap-6">
-                            <div className="card p-6 h-[400px] flex flex-col">
+                            <div className="card p-6 h-[500px] flex flex-col">
                                 <div className="rock-texture"></div>
-                                <div className="flex items-center gap-2 mb-4 text-white/80">
-                                    <Icons.ArrowRightLeft />
-                                    <h2 className="font-semibold uppercase tracking-wider text-sm">Live Tokenizer</h2>
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="flex items-center gap-2 text-white/80">
+                                        <Icons.ArrowRightLeft />
+                                        <h2 className="font-semibold uppercase tracking-wider text-sm">Live Tokenizer</h2>
+                                    </div>
+                                    <button 
+                                        onClick={handleEncode}
+                                        disabled={encodingLoading}
+                                        className="px-4 py-1.5 bg-teal-700 hover:bg-teal-600 text-white text-xs font-bold rounded-full transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(13,148,136,0.2)]"
+                                    >
+                                        {encodingLoading ? (
+                                            <>
+                                                <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                PROCESSING...
+                                            </>
+                                        ) : (
+                                            "TOKENIZE"
+                                        )}
+                                    </button>
                                 </div>
-                                <div className="flex gap-4 flex-1">
-                                    <div className="w-1/2 flex flex-col gap-4">
+                                <div className="flex gap-4 flex-1 overflow-hidden">
+                                    <div className="w-1/2 flex flex-col">
                                         <textarea 
                                             className="flex-1 bg-black/40 border border-white/10 rounded-lg p-4 mono text-sm text-white/80 focus:outline-none focus:border-teal-500/50 resize-none"
                                             value={inputText}
                                             onChange={(e) => setInputText(e.target.value)}
                                             placeholder="Enter text to tokenize..."
                                         />
-                                        <button 
-                                            onClick={handleEncode}
-                                            disabled={encodingLoading}
-                                            className="py-3 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                                        >
-                                            {encodingLoading ? (
-                                                <>
-                                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                                    TOKENIZING...
-                                                </>
-                                            ) : (
-                                                "TOKENIZE"
-                                            )}
-                                        </button>
                                     </div>
                                     <div className="w-1/2 bg-black/60 rounded-lg p-4 overflow-y-auto mono text-sm border border-white/5 relative">
                                         {encodedTokens.length > 0 ? (
