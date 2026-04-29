@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRATA — Subword Tokenization</title>
+    <!-- Tailwind for layout utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & Babel for JSX -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- PropTypes (Required by Recharts) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.8.1/prop-types.min.js"></script>
+    <!-- Recharts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.8.0/Recharts.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0f0f0f;
+            --surface: #1a1a1a;
+            --border: #2a2a2a;
+            --amber: #d97706;
+            --teal: #0d9488;
+            --green: #059669;
+            --rust: #92400e;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #e5e5e5;
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Geological texture */
+        .rock-texture {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .token-chip {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: all 200ms ease;
+            display: inline-block;
+            margin: 2px;
+            border: 1px solid transparent;
+        }
+
+        .token-chip.amber { background: rgba(217, 119, 6, 0.2); border-color: var(--amber); color: var(--amber); }
+        .token-chip.green { background: rgba(5, 150, 105, 0.2); border-color: var(--green); color: var(--green); }
+        .token-chip.teal { background: rgba(13, 148, 136, 0.2); border-color: var(--teal); color: var(--teal); }
+        .token-chip.purple { background: rgba(147, 51, 234, 0.2); border-color: #9333ea; color: #a855f7; }
+        .token-chip.default { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+
+        /* Animations */
+        @keyframes sedimentFlow {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(0); }
+        }
+
+        .sediment-layer {
+            animation: sedimentFlow 2s ease-out forwards;
+        }
+
+        .panel-transition-enter { opacity: 0; transform: translateY(10px); }
+        .panel-transition-enter-active { opacity: 1; transform: translateY(0); transition: all 300ms; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--amber); }
+
+        .pressure-gauge {
+            height: 10px;
+            border-radius: 5px;
+            background: #222;
+            overflow: hidden;
+            position: relative;
+        }
+        .pressure-fill {
+            height: 100%;
+            transition: width 500ms ease;
+        }
+
+        /* Missing Utilities */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 300ms ease forwards;
+        }
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel" src="app.js"></script>
+</body>
+</html>
