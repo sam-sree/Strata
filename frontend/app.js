@@ -40,13 +40,16 @@ const STRATA_APP = () => {
     const [corpus, setCorpus] = useState("The foundations of language are built like the strata of the earth. Each merge adds a new layer of complexity, a new mineral of meaning crystallized from the raw dust of characters. To understand the structure of the whole, one must excavate the parts, layer by layer, until the base bedrock is revealed.");
     const [vocabSize, setVocabSize] = useState(150);
     const [loading, setLoading] = useState(false);
+    const [encodingLoading, setEncodingLoading] = useState(false);
     const [trainingData, setTrainingData] = useState(null);
     const [currentStep, setCurrentStep] = useState(0);
     const [inputText, setInputText] = useState("");
     const [encodedTokens, setEncodedTokens] = useState([]);
     const [selectedTokenAncestry, setSelectedTokenAncestry] = useState(null);
 
-    const API_URL = "/api";
+    const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+        ? "http://127.0.0.1:5000" 
+        : "/api";
 
     const handleTrain = async () => {
         setLoading(true);
@@ -69,7 +72,8 @@ const STRATA_APP = () => {
     };
 
     const handleEncode = async () => {
-        if (!trainingData) return;
+        if (!trainingData || !inputText.trim()) return;
+        setEncodingLoading(true);
         try {
             const response = await fetch(`${API_URL}/encode`, {
                 method: 'POST',
@@ -80,6 +84,8 @@ const STRATA_APP = () => {
             setEncodedTokens(data.tokens);
         } catch (err) {
             console.error("Encoding failed:", err);
+        } finally {
+            setEncodingLoading(false);
         }
     };
 
@@ -342,9 +348,17 @@ const STRATA_APP = () => {
                                         />
                                         <button 
                                             onClick={handleEncode}
-                                            className="py-3 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg transition-all"
+                                            disabled={encodingLoading}
+                                            className="py-3 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                                         >
-                                            TOKENIZE
+                                            {encodingLoading ? (
+                                                <>
+                                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                                    TOKENIZING...
+                                                </>
+                                            ) : (
+                                                "TOKENIZE"
+                                            )}
                                         </button>
                                     </div>
                                     <div className="w-1/2 bg-black/60 rounded-lg p-4 overflow-y-auto mono text-sm border border-white/5 relative">
@@ -441,6 +455,11 @@ const STRATA_APP = () => {
                     </div>
                 )}
             </main>
+            <footer className="mt-8 mb-4 flex justify-center items-center gap-2 border-t border-white/5 pt-6">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-white/20 mono">
+                    engineered by <a href="https://github.com/sam-sree" target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-amber-500 transition-colors underline-offset-4 hover:underline">samyukta sreekanth</a> in 2026
+                </p>
+            </footer>
         </div>
     );
 };
