@@ -201,8 +201,8 @@ const STRATA_APP = () => {
                 {/* PANEL 1: TRAIN */}
                 {activePanel === 'train' && (
                     <div className="flex-1 flex flex-col lg:grid lg:grid-cols-12 gap-6 animate-fade-in overflow-y-auto lg:overflow-visible pr-1">
-                        {/* 1. Corpus Column - Always First */}
-                        <div className="order-1 lg:order-1 col-span-12 lg:col-span-6 flex flex-col gap-6">
+                        {/* LEFT COLUMN: Corpus */}
+                        <div className="order-1 lg:col-span-8 flex flex-col gap-6">
                             <div className="card min-h-[300px] lg:flex-1 p-4 lg:p-6 flex flex-col">
                                 <div className="rock-texture"></div>
                                 <div className="flex justify-between items-center mb-1">
@@ -221,7 +221,7 @@ const STRATA_APP = () => {
                                         <Icons.ArrowRightLeft /> NEXT EXAMPLE
                                     </button>
                                 </div>
-                                <p className="text-[10px] text-white/40 mb-4 uppercase tracking-tighter">The raw material used to learn common patterns and vocabulary.</p>
+                                <p className="text-[10px] text-white/40 mb-4 uppercase tracking-tighter italic">The raw material used to learn patterns. <span className="text-amber-500/60 ml-1">Editable: type or paste your own text.</span></p>
                                 <textarea 
                                     className="flex-1 bg-black/40 border border-white/10 rounded-lg p-4 mono text-sm text-white/80 focus:outline-none focus:border-amber-500/50 resize-none"
                                     value={corpus}
@@ -231,9 +231,10 @@ const STRATA_APP = () => {
                             </div>
                         </div>
 
-                        {/* 2. Params Column - Second on Laptop, Third on Mobile */}
-                        <div className="order-3 lg:order-2 col-span-12 lg:col-span-3 flex flex-col gap-6">
-                            <div className="card p-6">
+                        {/* RIGHT COLUMN: Params and Explanation (Stacked on Laptop) */}
+                        <div className="order-2 lg:col-span-4 flex flex-col gap-6">
+                            {/* BPE Parameters */}
+                            <div className="order-1 card p-6">
                                 <div className="rock-texture"></div>
                                 <h3 className="text-xs uppercase tracking-widest text-white/40 mb-1 flex items-center gap-2">
                                     <Icons.Layers /> BPE Parameters
@@ -259,7 +260,7 @@ const STRATA_APP = () => {
                                     <button 
                                         onClick={handleTrain}
                                         disabled={loading}
-                                        className="w-full py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg transition-all shadow-[0_0_20px_rgba(217,119,6,0.2)] hover:shadow-[0_0_30px_rgba(217,119,6,0.4)] flex items-center justify-center gap-3 active:scale-95"
+                                        className="w-full py-4 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg transition-all shadow-[0_0_200px_rgba(217,119,6,0.2)] hover:shadow-[0_0_30px_rgba(217,119,6,0.4)] flex items-center justify-center gap-3 active:scale-95"
                                     >
                                         {loading ? (
                                             <span className="flex items-center gap-2">
@@ -274,24 +275,28 @@ const STRATA_APP = () => {
                                     </button>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* 3. Explanation Column - Third on Laptop, Second on Mobile */}
-                        <div className="order-2 lg:order-3 col-span-12 lg:col-span-3 flex flex-col gap-6">
-                            <div className="card p-6 flex-1">
-                                <div className="rock-texture"></div>
-                                <h2 className="text-xs uppercase tracking-widest text-amber-500 mb-4 font-bold">New to BPE?</h2>
-                                <div className="space-y-4 text-xs text-white/60 leading-relaxed">
-                                    <p>
-                                        <strong className="text-white">Byte Pair Encoding (BPE)</strong> is how AI models like GPT "read" text. Instead of looking at whole words or single characters, it finds the most frequent patterns and merges them into "tokens".
-                                    </p>
-                                    <p>
-                                        This process reduces the length of the text while keeping the most meaningful combinations together, making it much more efficient for machines to process.
-                                    </p>
-                                    <div className="p-3 bg-white/5 rounded border border-white/10 italic">
-                                        Think of it like geological sedimentation—characters are the raw dust, and merges are the layers forming solid rock.
-                                    </div>
-                                </div>
+                            {/* New to BPE? Explanation - Stacked below on laptop, last on mobile */}
+                            <div className="order-2 card p-6 flex-1">
+                                 <div className="rock-texture"></div>
+                                 <h2 className="text-xs uppercase tracking-widest text-amber-500 mb-4 font-bold">New to BPE?</h2>
+                                 <div className="space-y-4 text-xs text-white/60 leading-relaxed">
+                                     <p>
+                                         <strong className="text-white">Byte Pair Encoding (BPE)</strong> is the foundational algorithm that allows Large Language Models to convert raw text into a mathematical language they can understand. 
+                                     </p>
+                                     <p>
+                                         Instead of using a static dictionary of words, BPE starts with individual characters and iteratively merges the most frequent adjacent pairs. This creates a "subword" vocabulary that is incredibly robust.
+                                     </p>
+                                     <div className="p-3 bg-white/5 rounded border border-white/10 italic">
+                                         Think of it like geological sedimentation: characters are the raw dust, and each merge rule acts as a chemical bond, crystallizing simple grains into complex mineral structures.
+                                     </div>
+                                     <p>
+                                         <strong className="text-white">Why it matters:</strong> By learning to group common patterns like "ing" or "tion" into single tokens, the model compresses data without losing meaning. This allows AI to handle rare words by breaking them down into known fragments, ensuring it never encounters an "unknown" sequence.
+                                     </p>
+                                     <p>
+                                         The process continues until your specified <strong className="text-amber-500">Target Vocab Size</strong> is reached, resulting in a perfectly balanced map of linguistic layers.
+                                     </p>
+                                 </div>
                             </div>
                         </div>
                     </div>
